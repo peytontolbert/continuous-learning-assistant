@@ -4,6 +4,7 @@ import torch
 import json
 import logging
 import time
+import threading  # {{ New import }}
 
 class InteractionDataset(Dataset):
     def __init__(self, interactions, tokenizer, max_length=8192):
@@ -73,21 +74,28 @@ def fine_tune_dpo(training_knowledge_store, output_dir='./fine_tuned_model', epo
     logging.info("DPO fine-tuning completed.")
 
 
-def fine_tune_model(TRAINING_INTERVAL, MIN_TRAINING_SAMPLES, FINE_TUNED_MODEL_DIR, training_knowledge_store):
+def fine_tune_model(TRAINING_INTERVAL, MIN_TRAINING_SAMPLES, FINE_TUNED_MODEL_DIR, training_knowledge_store, training_trigger):  # {{ Added training_trigger parameter }}
     """
     Periodically fine-tunes the model using accumulated training examples.
     Runs in a separate daemon thread.
     """
     while True:
-        logging.info("Training thread sleeping for interval...")
-        time.sleep(TRAINING_INTERVAL)
-        
+        # Wait for the training trigger to be set
+        training_trigger.wait()  # {{ Wait until triggered }}
+        logging.info("Training trigger received. Starting fine-tuning.")
+
         if len(training_knowledge_store) < MIN_TRAINING_SAMPLES:
             logging.info("Not enough training samples. Waiting for more interactions.")
+            training_trigger.clear()  # {{ Reset the trigger }}
             continue
-        
+
         fine_tune_dpo(training_knowledge_store, output_dir=FINE_TUNED_MODEL_DIR)
         # Clear the training knowledge store after training
         training_knowledge_store.clear()
         logging.info("Training knowledge store cleared after fine-tuning.")
-    
+
+        training_trigger.clear()  # {{ Reset the trigger }}
+
+        # Optionally, sleep for the TRAINING_INTERVAL before next check
+        time.sleep(TRAINING_INTERVAL)
+

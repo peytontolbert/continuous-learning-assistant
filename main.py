@@ -114,14 +114,18 @@ logging.info("Retrieval knowledge store ready.")
 
 def main():
 
-    # Start the training thread
+    # Initialize training trigger event
+    training_trigger = threading.Event()
+
+    # Start the training thread with the training_trigger
     training_thread = threading.Thread(
         target=fine_tune_model,
         args=(
             TRAINING_INTERVAL,
             MIN_TRAINING_SAMPLES,
             FINE_TUNED_MODEL_DIR,
-            training_knowledge_store
+            training_knowledge_store,
+            training_trigger  # {{ Pass the event to the training thread }}
         ),
         daemon=True
     )
@@ -280,8 +284,7 @@ def main():
         # Real-Time Learning: Handled inherently by updating the interaction sequence and using embeddings
         if get_training_knowledge_count(training_knowledge_store) >= MIN_TRAINING_SAMPLES:
             logging.info("Minimum training samples reached. Triggering model training...")
-            # Assuming fine_tune_model handles its own training process based on the sample count
-            # If additional triggers are needed, implement here
+            training_trigger.set()  # {{ Signal the training thread to start fine-tuning }}
 
 # -----------------------------------------------------------
 
