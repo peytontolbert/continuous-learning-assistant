@@ -1,0 +1,6 @@
+faiss_index.bin
+knowledge_store.pkl
+retrieval_faiss_index.bin
+training_knowledge_store.json
+__pycache__/
+prompts/IterationOfThoughts.txt

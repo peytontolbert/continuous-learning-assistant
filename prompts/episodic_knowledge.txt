@@ -1,0 +1,7 @@
+[THOUGHTS]
+{thoughts}
+
+[INSTRUCTION]
+Using above [INPUT] and [THOUGHTS], please summarize the event.
+
+[SUMMARY]
