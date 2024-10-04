@@ -15,7 +15,18 @@ The Continuous Learning Assistant is an intelligent chat-based system designed t
 
 ## Architecture
 
-![Workflow Diagram](diagram.md)
+![Workflow Diagram]
+
+```mermaid
+graph TD
+    UI["User Interface (Chat Interface)"] --> PP["Processing Pipeline (Preprocessing, Context Management, NER Extraction)"]
+    PP --> RG["Response Generation (GPT Model + LoRA)"]
+    PP --> RK["Retrieval Knowledge Store (FAISS Index)"]
+    RG --> FBC["Feedback Collection (Explicit/Implicit)"]
+    RG --> TKS["Training Knowledge Store (User Inputs, Responses, Feedback, Metadata)"]
+    FBC --> ATP["Asynchronous Training Pipeline (Fine-Tuning with Backpropagation)"]
+    RK --> ATP
+```
 
 1. **User Interface**: The front-end chat interface where users interact with the assistant.
 2. **Processing Pipeline**: Preprocesses user inputs, manages context, and extracts named entities.
