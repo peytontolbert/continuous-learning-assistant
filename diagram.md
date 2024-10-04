@@ -1,34 +1,13 @@
-+--------------------+          +-------------------------------+          +----------------------+
-|                    |          |                               |          |                      |
-|   User Interface   +--------->+      Processing Pipeline      +--------->+  Response Generation |
-| (Chat Interface)   |          | (Preprocessing, Context       |          |  (GPT Model + LoRA)  |
-|                    |          |  Management, NER Extraction)  |          |                      |
-+--------------------+          +-------------------------------+          +----------------------+
-                                           |                                       |
-                                           v                                       |
-                              +-------------------------+                          |
-                              |  Retrieval Knowledge    |                          |
-                              |  Store (FAISS Index)    |                          |
-                              +-------------------------+                          |
-                                           |                                       |
-                                           v                                       |
-                              +-----------------------------+                      |
-                              | Generate Response for user  |                      |
-                              +-----------------------------+                      |
-                                           |                                       |
-                                           v                                       v
-                              +-------------------------+          +-------------------------------+
-                              |  Feedback Collection    +<---------+   Training Knowledge Store    |
-                              |  (Explicit/Implicit)    |          |  (User Inputs, Responses,     |
-                              +-------------------------+          |   Feedback, Metadata)         |
-                                           |                       +-------------------------------+
-                                           v
-                              +-------------------------+
-                              |  Asynchronous Training  |
-                              |     Pipeline            |
-                              |  (Fine-Tuning with      |
-                              |   Backpropagation)      | 
-                              +-------------------------+
+```mermaid
+graph TD
+    UI[User Interface<br/>(Chat Interface)] --> PP[Processing Pipeline<br/>(Preprocessing, Context Management, NER Extraction)]
+    PP --> RG[Response Generation<br/>(GPT Model + LoRA)]
+    PP --> RK[Retrieval Knowledge Store<br/>(FAISS Index)]
+    RG --> FBC[Feedback Collection<br/>(Explicit/Implicit)]
+    RG --> TKS[Training Knowledge Store<br/>(User Inputs, Responses, Feedback, Metadata)]
+    FBC --> ATP[Asynchronous Training Pipeline<br/>(Fine-Tuning with Backpropagation)]
+    RK --> ATP
+```
 
 - Assistant needs both knowledge store and training pipeline.
 - Training pipeline is to provide better prediction on responses. 
