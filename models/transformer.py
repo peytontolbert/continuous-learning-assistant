@@ -1,17 +1,28 @@
 import logging
 from transformers import pipeline
 import torch
-
+import os
 
 # Transformer model selection
-MODEL_NAME = 'meta-llama/Llama-3.2-3B-Instruct'  # Replace with desired model
+MODEL_NAME = "meta-llama/Llama-3.2-3B-Instruct"  # Replace with desired model
+
+# Model directories
+FINE_TUNED_MODEL_DIR = "./fine_tuned_model"
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s:%(message)s")
 
 # Load the language model and tokenizer
 logging.info("Loading language model...")
 try:
+
+    # Load the fine-tuned model if it exists, otherwise load the base model
+    if os.path.exists(FINE_TUNED_MODEL_DIR) and os.listdir(FINE_TUNED_MODEL_DIR):
+        logging.info("Loading fine-tuned model...")
+        MODEL_NAME = FINE_TUNED_MODEL_DIR
+    else:
+        logging.info("Loading base Transformers model...") 
+        
     # Initialize the text-generation pipeline
     pipe = pipeline(
         "text-generation",
