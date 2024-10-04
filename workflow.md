@@ -1,16 +1,16 @@
 ```mermaid
 graph TD
-    UI[User Interface<br>(Chat Interface)] --> PP[Processing Pipeline<br>(Preprocessing,<br>Context Management,<br>NER Extraction)]
-    PP --> RG[Response Generation<br>(GPT Model + LoRA)]
+    UI[User Interface (Chat Interface)] --> PP[Processing Pipeline (Preprocessing, Context Management, NER Extraction)]
+    PP --> RG[Response Generation (GPT Model + LoRA)]
     
-    PP --> RK[Retrieval Knowledge Store<br>(FAISS Index)]
+    PP --> RK[Retrieval Knowledge Store (FAISS Index)]
     RK --> GR[Generate Response for User]
     
-    GR --> FC[Feedback Collection<br>(Explicit/Implicit)]
-    GR --> TKS[Training Knowledge Store<br>(User Inputs, Responses,<br>Feedback, Metadata)]
+    GR --> FC[Feedback Collection (Explicit/Implicit)]
+    GR --> TKS[Training Knowledge Store (User Inputs, Responses, Feedback, Metadata)]
     
     FC --> TKS
     
-    TKS --> ATP[Asynchronous Training Pipeline<br>(Fine-Tuning with Backpropagation)]
+    TKS --> ATP[Asynchronous Training Pipeline (Fine-Tuning with Backpropagation)]
     ATP --> RG
 ```
