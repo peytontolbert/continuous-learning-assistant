@@ -4,3 +4,4 @@ retrieval_faiss_index.bin
 training_knowledge_store.json
 __pycache__/
 prompts/IterationOfThoughts.txt
+griffin_training_knowledge_store.json
