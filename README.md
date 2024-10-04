@@ -15,8 +15,6 @@ The Continuous Learning Assistant is an intelligent chat-based system designed t
 
 ## Architecture
 
-![Workflow Diagram]
-
 ```mermaid
 graph TD
     UI["User Interface (Chat Interface)"] --> PP["Processing Pipeline (Preprocessing, Context Management, NER Extraction)"]
